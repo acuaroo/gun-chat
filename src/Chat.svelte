@@ -15,6 +15,7 @@
   let lastScrollTop;
   let canAutoScroll = true;
   let unreadMessages = false;
+  let textContent
 
   function autoScroll() {
     setTimeout(() => scrollBottom?.scrollIntoView({ behavior: 'auto' }), 50);
@@ -66,6 +67,8 @@
   });
 
   async function sendMessage() {
+    textContent = message;
+
     const secret = await SEA.encrypt(newMessage, '#foo');
     const message = user.get('all').set({ what: secret });
     const index = new Date().toISOString();
@@ -74,6 +77,7 @@
     canAutoScroll = true;
     autoScroll();
   }
+
 </script>
 
 <div class="container">
@@ -97,10 +101,8 @@
     <div class="scroll-button">
       <button on:click={autoScroll} class:red={unreadMessages}>
         {#if unreadMessages}
-          💬
+          💬 new messages
         {/if}
-
-        👇
       </button>
     </div>
    {/if}
